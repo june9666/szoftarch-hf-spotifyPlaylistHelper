@@ -2,16 +2,20 @@ package hu.bme.playlisthelper;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
@@ -26,6 +30,7 @@ public class PlaylistActivity extends AppCompatActivity {
     RadioButton intersectAll;
     RadioButton intersectCustom;
     Button createList;
+    int intersectPickerNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +46,35 @@ public class PlaylistActivity extends AppCompatActivity {
         intersectAll= findViewById(R.id.radio_intersect_all);
         intersectCustom= findViewById(R.id.radio_intersect_custom);
         createList = findViewById(R.id.button_createList);
+        intersectPickerNumber =1;
 
 
         groupCustom.setOnClickListener(view ->
                 Toast.makeText(view.getContext(),"inflate emberpicker",  Toast.LENGTH_LONG).show());
 
-        intersectCustom.setOnClickListener(view ->
-                Toast.makeText(view.getContext(),"inflate numberpicker",  Toast.LENGTH_LONG).show());
+        intersectCustom.setOnClickListener(view -> {
+            NumberPicker picker = new NumberPicker(view.getContext());
+
+            picker.setMinValue(1);
+            picker.setMaxValue(10);
+            picker.setValue(intersectPickerNumber);
+
+            FrameLayout layout = new FrameLayout(view.getContext());
+            layout.addView(picker, new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.WRAP_CONTENT,
+                    FrameLayout.LayoutParams.WRAP_CONTENT,
+                    Gravity.CENTER));
+
+            new AlertDialog.Builder(view.getContext())
+                    .setView(layout)
+                    .setTitle("Number of peoples")
+                    .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
+                        intersectPickerNumber=picker.getValue();
+                        Toast.makeText(view.getContext(),"Selected " + intersectPickerNumber+".",  Toast.LENGTH_SHORT).show();
+                    })
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show();
+        });
 
         createList.setOnClickListener(view ->
                 Toast.makeText(view.getContext(),"create list",  Toast.LENGTH_LONG).show());
