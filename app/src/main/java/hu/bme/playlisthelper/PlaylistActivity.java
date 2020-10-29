@@ -1,36 +1,47 @@
 package hu.bme.playlisthelper;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
+import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
-import androidx.room.Room;
+import androidx.fragment.app.FragmentTransaction;
 
 public class PlaylistActivity extends AppCompatActivity {
 
     RadioGroup includeGroup;
     RadioButton groupFamily;
     RadioButton groupFriends;
-    RadioButton groupCustom;
+    RadioButton groupSelect;
     RadioButton intersectAll;
     RadioButton intersectCustom;
     Button createList;
     int intersectPickerNumber;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,15 +53,11 @@ public class PlaylistActivity extends AppCompatActivity {
         includeGroup = findViewById(R.id.radioGroup);
         groupFamily = findViewById(R.id.radio_family);
         groupFriends = findViewById(R.id.radio_friends);
-        groupCustom= findViewById(R.id.radio_custom);
+        groupSelect = findViewById(R.id.radio_select);
         intersectAll= findViewById(R.id.radio_intersect_all);
         intersectCustom= findViewById(R.id.radio_intersect_custom);
         createList = findViewById(R.id.button_createList);
         intersectPickerNumber =1;
-
-
-        groupCustom.setOnClickListener(view ->
-                Toast.makeText(view.getContext(),"inflate emberpicker",  Toast.LENGTH_LONG).show());
 
         intersectCustom.setOnClickListener(view -> {
             NumberPicker picker = new NumberPicker(view.getContext());

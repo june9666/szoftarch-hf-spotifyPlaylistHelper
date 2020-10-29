@@ -32,6 +32,9 @@
     <string name="intersect_all">Intersect all</string>
     <string name="intersect_custom">Intersect custom</string>
     <string name="create">Create</string>
+    <string name="select_friends">Select friends</string>
+    <string name="select">Select</string>
+    <string name="selected">Selected</string>
     <string-array name="category_items">
         <item>Family</item>
         <item>Friend</item>
