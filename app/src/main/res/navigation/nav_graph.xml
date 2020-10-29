@@ -7,22 +7,35 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="hu.bme.playlisthelper.FirstFragment"
+        android:name="hu.bme.playlisthelper.LoginFragment"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
+        tools:layout="@layout/fragment_login">
 
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            android:id="@+id/action_Login_to_MenuScreen"
+            app:destination="@id/MenuScreen" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="hu.bme.playlisthelper.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        android:id="@+id/MenuScreen"
+        android:name="hu.bme.playlisthelper.MenuScreenFragment"
+        android:label="@string/menu_screen_fragment_label"
+        tools:layout="@layout/fragment_menu_screen">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
+        <action
+            android:id="@+id/action_MenuScreen_to_FriendList"
+            app:destination="@+id/FriendList"
+            />
     </fragment>
+
+    <fragment
+        android:id="@+id/FriendList"
+        android:name="hu.bme.playlisthelper.FriendList"
+        android:label="@string/friend_list"
+        tools:layout="@layout/fragment_friend_list"/>
+
+
+
 </navigation>
