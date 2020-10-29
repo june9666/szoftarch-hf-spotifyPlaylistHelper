@@ -7,6 +7,7 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
@@ -15,9 +16,15 @@
     <string name="password">Password</string>
     <string name="create_new_playlist">Create new playlist</string>
     <string name="add_friends">Add Friends</string>
+    <string name="add_friend">Add Friend</string>
     <string name="friend_list">Friend List</string>
     <string name="name">Name</string>
     <string name="spotify_username">Spotify Username</string>
     <string name="category">Category</string>
     <string name="include_for_playlist_creation">Include for playlist creation</string>
+    <string-array name="category_items">
+        <item>Family</item>
+        <item>Friend</item>
+    </string-array>
+
 </resources>

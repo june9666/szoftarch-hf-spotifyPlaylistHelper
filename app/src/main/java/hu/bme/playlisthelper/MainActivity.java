@@ -1,5 +1,6 @@
 package hu.bme.playlisthelper;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -9,16 +10,27 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
+import android.util.Log;
 import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements NewFriendDialogFragment.NewFriendDialogListener {
+
+    private FriendListDatabase database;
+    private FriendListRecyclerViewAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,19 +39,18 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Toolbar toolbar = findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
-
-        //FloatingActionButton fab = findViewById(R.id.fab);
-        //fab.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View view) {
-        //        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-        //                .setAction("Action", null).show();
-        //    }
-        //}
-        //);
+        database = Room.databaseBuilder(
+                getApplicationContext(),
+                FriendListDatabase.class,
+                "friend-list"
+        ).build();
     }
+
+    public FriendListDatabase getFriendListDatabase(){
+        return database;
+    }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -62,4 +73,25 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onFriendItemCreated(FriendItem newItem) {
+        new AsyncTask<Void, Void, FriendItem>() {
+
+            @Override
+            protected FriendItem doInBackground(Void... voids) {
+                database.friendItemDao().insertAll(newItem);
+
+                return newItem;
+            }
+
+            @Override
+            protected void onPostExecute(FriendItem friendItem) {
+                adapter.addItem(friendItem);
+
+            }
+        }.execute();
+    }
+
+
 }

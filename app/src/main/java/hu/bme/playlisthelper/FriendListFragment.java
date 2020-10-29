@@ -1,11 +1,13 @@
 package hu.bme.playlisthelper;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,17 +23,16 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
-import androidx.room.Room;
-import hu.bme.playlisthelper.dummy.DummyContent;
+
 
 /**
  * A fragment representing a list of Items.
  */
-public class FriendListFragment extends Fragment implements FriendListRecyclerViewAdapter.FriendItemClickListener, NewFriendDialogFragment.NewFriendDialogListener {
-
-    private FriendListDatabase database;
+public class FriendListFragment extends Fragment  implements FriendListRecyclerViewAdapter.FriendItemClickListener {
     private RecyclerView recyclerView;
     private FriendListRecyclerViewAdapter adapter;
+    public FriendListDatabase database;
+
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -45,30 +46,43 @@ public class FriendListFragment extends Fragment implements FriendListRecyclerVi
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         FloatingActionButton fab = view.findViewById(R.id.fab);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new NewFriendDialogFragment().show(, NewFriendDialogFragment.TAG);
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                NewFriendDialogFragment newFriendDialogFragment = NewFriendDialogFragment.newInstance();
+                newFriendDialogFragment.show(fm, newFriendDialogFragment.TAG);
             }
         });
 
-        database = Room.databaseBuilder(
-                view.getContext(),
-                FriendListDatabase.class,
-                "friend-list"
-        ).build();
-
+        MainActivity main = (MainActivity) getActivity();
+        database = main.getFriendListDatabase();
         initRecyclerView(view);
-    }
 
+    }
     private void initRecyclerView(View view) {
         recyclerView = view.findViewById(R.id.MainRecyclerView);
         adapter = new FriendListRecyclerViewAdapter(this);
         loadItemsInBackground();
-        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setAdapter(adapter);
     }
 
+    private void loadItemsInBackground() {
+        new AsyncTask<Void, Void, List<FriendItem>>() {
+
+            @Override
+            protected List<FriendItem> doInBackground(Void... voids) {
+                return database.friendItemDao().getAll();
+            }
+
+            @Override
+            protected void onPostExecute(List<FriendItem> friendItems) {
+                adapter.update(friendItems);
+            }
+        }.execute();
+    }
     @Override
     public void onItemChanged(final FriendItem item) {
         final AsyncTask<Void, Void, Boolean> execute = new AsyncTask<Void, Void, Boolean>() {
@@ -117,18 +131,6 @@ public class FriendListFragment extends Fragment implements FriendListRecyclerVi
 */
         }).start();
     }
-    private void loadItemsInBackground() {
-        new AsyncTask<Void, Void, List<FriendItem>>() {
 
-            @Override
-            protected List<FriendItem> doInBackground(Void... voids) {
-                return database.friendItemDao().getAll();
-            }
 
-            @Override
-            protected void onPostExecute(List<FriendItem> friendItems) {
-                adapter.update(friendItems);
-            }
-        }.execute();
-    }
 }

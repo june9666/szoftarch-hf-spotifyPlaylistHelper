@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:text="Include during \nplaylist selection" />
+        android:text="Include" />
 
     <ImageView
         android:id="@+id/FriendItemIconImageView"
@@ -28,6 +28,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
+        android:layout_marginTop="14dp"
         android:layout_weight="1"
         android:orientation="vertical">
 

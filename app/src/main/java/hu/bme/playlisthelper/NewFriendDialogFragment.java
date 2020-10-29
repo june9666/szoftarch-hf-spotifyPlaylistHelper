@@ -20,16 +20,27 @@ public class NewFriendDialogFragment extends DialogFragment {
 
     public static final String TAG = "NewFriendDialogFragment";
 
-    public interface NewFriendDialogListener {
-        void onFriendItemCreated(FriendItem newItem);
-    }
-
-    private NewFriendDialogListener listener;
-
     private EditText nameEditText;
     private EditText usernameEditText;
     private Spinner categorySpinner;
     private CheckBox isDefaultCheckBox;
+    private NewFriendDialogListener listener;
+
+    public interface NewFriendDialogListener {
+        void onFriendItemCreated(FriendItem newItem);
+    }
+
+    public NewFriendDialogFragment() {
+        // Empty constructor is required for DialogFragment
+        // Make sure not to add arguments to the constructor
+        // Use `newInstance` instead as shown below
+    }
+
+    public static NewFriendDialogFragment newInstance() {
+        NewFriendDialogFragment frag = new NewFriendDialogFragment();
+
+        return frag;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,27 +49,56 @@ public class NewFriendDialogFragment extends DialogFragment {
         if (activity instanceof NewFriendDialogListener) {
             listener = (NewFriendDialogListener) activity;
         } else {
-            throw new RuntimeException("Activity must implement the NewFriendDialogListener interface!");
+            throw new RuntimeException("Activity must implement the NewShoppingItemDialogListener interface!");
         }
     }
+
+
+
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getContext());
-        return alertDialogBuilder.create();
+        return new AlertDialog.Builder(requireContext())
+                .setTitle(R.string.add_friend)
+                .setView(getContentView())
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (isValid()) {
+                            listener.onFriendItemCreated(getFriendItem());
+                        }
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .create();
     }
 
     private View getContentView() {
-        View contentView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_new_shopping_item, null);
-        nameEditText = contentView.findViewById(R.id.ShoppingItemNameEditText);
-        descriptionEditText = contentView.findViewById(R.id.ShoppingItemDescriptionEditText);
-        estimatedPriceEditText = contentView.findViewById(R.id.ShoppingItemEstimatedPriceEditText);
-        categorySpinner = contentView.findViewById(R.id.ShoppingItemCategorySpinner);
+        View contentView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_new_friend, null);
+        nameEditText = contentView.findViewById(R.id.AddFriendFriendNameEditText);
+        usernameEditText = contentView.findViewById(R.id.AddFriendSpotifyUsernameEditText);
+
+        categorySpinner = contentView.findViewById(R.id.AddFriendCategorySpinner);
         categorySpinner.setAdapter(new ArrayAdapter<>(requireContext(),
                 android.R.layout.simple_spinner_dropdown_item,
                 getResources().getStringArray(R.array.category_items)));
-        alreadyPurchasedCheckBox = contentView.findViewById(R.id.ShoppingItemIsPurchasedCheckBox);
+        isDefaultCheckBox = contentView.findViewById(R.id.AddFriendIsDefaultCheckBox);
         return contentView;
     }
+    private boolean isValid() {
+        return nameEditText.getText().length() > 0;
+    }
+
+    private FriendItem getFriendItem() {
+        FriendItem friendItem = new FriendItem();
+        friendItem.name = nameEditText.getText().toString();
+        friendItem.username = usernameEditText.getText().toString();
+
+        friendItem.category = FriendItem.Category.getByOrdinal(categorySpinner.getSelectedItemPosition());
+        friendItem.isDefault = isDefaultCheckBox.isChecked();
+        return friendItem;
+    }
+
 
 }
