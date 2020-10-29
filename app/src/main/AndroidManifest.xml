@@ -23,7 +23,12 @@
             android:name=".FriendListActivity"
             android:label="FriendList"
             android:theme="@style/Theme.PlaylistHelper.NoActionBar">
-    </activity>
+         </activity>
+        <activity
+            android:name=".PlaylistActivity"
+            android:label="Playlist"
+            android:theme="@style/Theme.PlaylistHelper.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

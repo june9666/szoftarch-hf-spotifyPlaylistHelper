@@ -23,6 +23,15 @@
     <string name="category">Category</string>
     <string name="include_for_playlist_creation">Include for playlist creation</string>
     <string name="testfragment">TestFragment</string>
+    <string name="new_playlist_name">New Playlist Name</string>
+    <string name="select_group_to_include">Select group to include:</string>
+    <string name="family">Family</string>
+    <string name="friends">Friends</string>
+    <string name="custom">Custom</string>
+    <string name="select_mix_method">Select mix method:</string>
+    <string name="intersect_all">Intersect all</string>
+    <string name="intersect_custom">Intersect custom</string>
+    <string name="create">Create</string>
     <string-array name="category_items">
         <item>Family</item>
         <item>Friend</item>

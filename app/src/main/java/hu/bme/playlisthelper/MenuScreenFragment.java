@@ -27,8 +27,9 @@ public class MenuScreenFragment extends Fragment {
         view.findViewById(R.id.button_create_new_playlist).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(MenuScreenFragment.this)
-                        .navigate(R.id.action_MenuScreen_to_Test);
+                Intent myIntent = new Intent(getActivity(), PlaylistActivity.class);
+
+                getActivity().startActivity(myIntent);
             }
         });
 
