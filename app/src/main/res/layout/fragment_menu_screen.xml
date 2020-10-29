@@ -21,17 +21,17 @@
 
     <Button
 
-        android:textColor="@color/white"
-        android:textAllCaps="false"
-        android:textSize="20sp"
-        android:backgroundTint="@color/spotify"
+        android:id="@+id/button_create_new_playlist"
         android:layout_width="250dp"
         android:layout_height="60dp"
-        app:cornerRadius="50dp"
-        android:id="@+id/button_create_new_playlist"
-
-        android:layout_marginTop="252dp"
+        android:layout_marginTop="128dp"
+        android:backgroundTint="@color/spotify"
         android:text="@string/create_new_playlist"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+
+        android:textSize="20sp"
+        app:cornerRadius="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"

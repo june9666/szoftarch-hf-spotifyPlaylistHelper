@@ -8,4 +8,8 @@
 
     </style>
 
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:fontFamily">@font/gotham_medium</item>
+    </style>
+
 </resources>
