@@ -50,6 +50,12 @@ public class FriendListRecyclerViewAdapter extends RecyclerView.Adapter<FriendLi
         FriendItem item = items.get(position);
         holder.nameTextView.setText(item.name);
         holder.usernameTextView.setText(item.username);
+        if (item.category.equals(FriendItem.Category.FAMILY)) {
+            holder.iconImageView.setBackgroundResource(R.drawable.family);
+        }else {
+            holder.iconImageView.setBackgroundResource(R.drawable.friends);
+        }
+
 
         holder.isDefaultCheckBox.setChecked(item.isDefault);
 
@@ -57,9 +63,10 @@ public class FriendListRecyclerViewAdapter extends RecyclerView.Adapter<FriendLi
     }
 
     public void addItem(FriendItem item) {
+
+        Log.d("Friend", "Adapter addItem called with" + item.name + item.toString());
         items.add(item);
         notifyItemInserted(items.size() - 1);
-
     }
 
     public void update(List<FriendItem> friendItems) {

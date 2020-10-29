@@ -19,6 +19,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".FriendListActivity"
+            android:label="FriendList"
+            android:theme="@style/Theme.PlaylistHelper.NoActionBar">
+    </activity>
     </application>
 
 </manifest>

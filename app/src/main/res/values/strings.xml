@@ -22,6 +22,7 @@
     <string name="spotify_username">Spotify Username</string>
     <string name="category">Category</string>
     <string name="include_for_playlist_creation">Include for playlist creation</string>
+    <string name="testfragment">TestFragment</string>
     <string-array name="category_items">
         <item>Family</item>
         <item>Friend</item>

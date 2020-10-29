@@ -3,6 +3,7 @@ package hu.bme.playlisthelper;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -97,6 +98,7 @@ public class NewFriendDialogFragment extends DialogFragment {
 
         friendItem.category = FriendItem.Category.getByOrdinal(categorySpinner.getSelectedItemPosition());
         friendItem.isDefault = isDefaultCheckBox.isChecked();
+        Log.d("Friend","getFriendItem" + friendItem.name + friendItem.toString());
         return friendItem;
     }
 

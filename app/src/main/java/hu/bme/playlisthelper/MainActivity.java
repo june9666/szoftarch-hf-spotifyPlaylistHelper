@@ -26,10 +26,9 @@ import android.widget.EditText;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements NewFriendDialogFragment.NewFriendDialogListener {
+public class MainActivity extends AppCompatActivity {
 
-    private FriendListDatabase database;
-    private FriendListRecyclerViewAdapter adapter;
+
 
 
     @Override
@@ -39,17 +38,8 @@ public class MainActivity extends AppCompatActivity implements NewFriendDialogFr
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        database = Room.databaseBuilder(
-                getApplicationContext(),
-                FriendListDatabase.class,
-                "friend-list"
-        ).build();
-    }
 
-    public FriendListDatabase getFriendListDatabase(){
-        return database;
     }
-
 
 
     @Override
@@ -74,24 +64,8 @@ public class MainActivity extends AppCompatActivity implements NewFriendDialogFr
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onFriendItemCreated(FriendItem newItem) {
-        new AsyncTask<Void, Void, FriendItem>() {
 
-            @Override
-            protected FriendItem doInBackground(Void... voids) {
-                database.friendItemDao().insertAll(newItem);
 
-                return newItem;
-            }
-
-            @Override
-            protected void onPostExecute(FriendItem friendItem) {
-                adapter.addItem(friendItem);
-
-            }
-        }.execute();
-    }
 
 
 }

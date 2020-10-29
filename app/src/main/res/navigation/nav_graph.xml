@@ -28,6 +28,10 @@
             android:id="@+id/action_MenuScreen_to_FriendList"
             app:destination="@+id/FriendList"
             />
+        <action
+            android:id="@+id/action_MenuScreen_to_Test"
+            app:destination="@+id/test"
+            />
     </fragment>
 
     <fragment
@@ -36,6 +40,11 @@
         android:label="@string/friend_list"
         tools:layout="@layout/fragment_friend_list"/>
 
+    <fragment
+        android:id="@+id/test"
+        android:name="hu.bme.playlisthelper.TestFragment"
+        android:label="@string/testfragment"
+        tools:layout="@layout/fragment_test"/>
 
 
 </navigation>

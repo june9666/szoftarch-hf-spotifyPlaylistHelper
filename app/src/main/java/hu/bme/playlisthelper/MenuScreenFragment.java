@@ -1,5 +1,6 @@
 package hu.bme.playlisthelper;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,11 +24,23 @@ public class MenuScreenFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        view.findViewById(R.id.button_add_friends).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.button_create_new_playlist).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 NavHostFragment.findNavController(MenuScreenFragment.this)
-                        .navigate(R.id.action_MenuScreen_to_FriendList);
+                        .navigate(R.id.action_MenuScreen_to_Test);
+            }
+        });
+
+        view.findViewById(R.id.button_add_friends).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(getActivity(), FriendListActivity.class);
+
+                getActivity().startActivity(myIntent);
+
+              //  NavHostFragment.findNavController(MenuScreenFragment.this)
+              //          .navigate(R.id.action_MenuScreen_to_FriendList);
             }
         });
 
