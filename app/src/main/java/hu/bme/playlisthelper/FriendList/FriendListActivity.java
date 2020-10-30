@@ -1,6 +1,5 @@
-package hu.bme.playlisthelper;
+package hu.bme.playlisthelper.FriendList;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +18,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
+import hu.bme.playlisthelper.R;
 
 public class FriendListActivity extends AppCompatActivity implements NewFriendDialogFragment.NewFriendDialogListener, FriendListRecyclerViewAdapter.FriendItemClickListener {
 

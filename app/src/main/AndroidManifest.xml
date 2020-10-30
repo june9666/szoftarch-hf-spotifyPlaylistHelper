@@ -20,12 +20,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".FriendListActivity"
+            android:name=".FriendList.FriendListActivity"
             android:label="FriendList"
             android:theme="@style/Theme.PlaylistHelper.NoActionBar">
          </activity>
         <activity
-            android:name=".PlaylistActivity"
+            android:name=".Playlist.PlaylistActivity"
             android:label="Playlist"
             android:theme="@style/Theme.PlaylistHelper.NoActionBar">
         </activity>

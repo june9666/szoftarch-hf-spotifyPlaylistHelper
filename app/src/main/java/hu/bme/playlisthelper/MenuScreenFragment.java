@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+import hu.bme.playlisthelper.FriendList.FriendListActivity;
+import hu.bme.playlisthelper.Playlist.PlaylistActivity;
 
 public class MenuScreenFragment extends Fragment {
 

@@ -1,4 +1,4 @@
-package hu.bme.playlisthelper;
+package hu.bme.playlisthelper.FriendList;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,6 +12,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import hu.bme.playlisthelper.R;
 
 import android.util.Log;
 import android.view.LayoutInflater;

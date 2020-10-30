@@ -36,7 +36,7 @@
 
     <fragment
         android:id="@+id/FriendList"
-        android:name="hu.bme.playlisthelper.FriendListFragment"
+        android:name="hu.bme.playlisthelper.FriendList.FriendListFragment"
         android:label="@string/friend_list"
         tools:layout="@layout/fragment_friend_list"/>
 

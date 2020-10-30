@@ -1,8 +1,9 @@
-package hu.bme.playlisthelper;
+package hu.bme.playlisthelper.FriendList;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import hu.bme.playlisthelper.R;
 
 import android.annotation.SuppressLint;
 import android.util.Log;

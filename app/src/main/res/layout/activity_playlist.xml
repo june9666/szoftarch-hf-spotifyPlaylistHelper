@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PlaylistActivity"
+    tools:context=".Playlist.PlaylistActivity"
     >
 
 
@@ -38,14 +38,27 @@
   -->
 
 
+    <fragment
+
+        class="hu.bme.playlisthelper.Playlist.PlaylistCreationFragment"
+        android:id="@+id/fragment_playlist_creation"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout2" />
+
+
+<!--
     <include
-        android:id="@+id/include"
+        android:id="@+id/playlist_creation_fragment"
         layout="@layout/fragment_playlist_creation"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout2" />
+-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

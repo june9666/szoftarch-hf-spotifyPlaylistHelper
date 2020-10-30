@@ -1,4 +1,4 @@
-package hu.bme.playlisthelper;
+package hu.bme.playlisthelper.FriendList;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

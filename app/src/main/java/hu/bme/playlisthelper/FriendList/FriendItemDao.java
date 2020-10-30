@@ -1,4 +1,4 @@
-package hu.bme.playlisthelper;
+package hu.bme.playlisthelper.FriendList;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import androidx.room.Update;
 
 @Dao
 public interface FriendItemDao {
-    @Query("SELECT * FROM frienditem")
+    @Query("SELECT * FROM FriendItem")
     List<FriendItem> getAll();
 
     @Insert

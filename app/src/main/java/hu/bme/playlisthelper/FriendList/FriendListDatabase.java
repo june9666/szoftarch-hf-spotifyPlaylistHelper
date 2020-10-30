@@ -1,9 +1,11 @@
-package hu.bme.playlisthelper;
+package hu.bme.playlisthelper.FriendList;
 
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
+import hu.bme.playlisthelper.FriendList.FriendItem;
+import hu.bme.playlisthelper.FriendList.FriendItemDao;
 
 @Database(
         entities = {FriendItem.class},
