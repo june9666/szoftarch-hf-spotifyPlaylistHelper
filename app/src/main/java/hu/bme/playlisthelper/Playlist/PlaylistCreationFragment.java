@@ -1,5 +1,6 @@
 package hu.bme.playlisthelper.Playlist;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
@@ -17,26 +19,69 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.room.Room;
+
+import com.android.volley.Request;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import hu.bme.playlisthelper.FriendList.FriendItem;
+import hu.bme.playlisthelper.FriendList.FriendListDatabase;
+import hu.bme.playlisthelper.FriendList.FriendListRecyclerViewAdapter;
 import hu.bme.playlisthelper.R;
+import hu.bme.playlisthelper.api.Connectors.PlaylistService;
+import hu.bme.playlisthelper.api.Connectors.SongService;
+import hu.bme.playlisthelper.api.Connectors.VolleyCallBack;
+import hu.bme.playlisthelper.api.Song;
 
-public class PlaylistCreationFragment extends Fragment {
+//Itt sok a magic, ehhez ne nyúlj ha nem muszáj.
 
+public class PlaylistCreationFragment extends Fragment implements FriendListRecyclerViewAdapter.FriendItemClickListener{
 
+    public FriendListRecyclerViewAdapter adapter;
     RadioGroup includeGroup;
     RadioButton groupFamily;
     RadioButton groupFriends;
     RadioButton groupSelect;
     RadioButton intersectAll;
     RadioButton intersectCustom;
+    EditText text;
+    private FriendListDatabase database;
     Button createList;
     int intersectPickerNumber;
+    NewPlaylistDialogListener listener;
+    int k=0;
+    int size=0;
+    ArrayList<Song> rp;
+    ArrayList<Song> playlist = new ArrayList<>();
+    SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
+    @Override
+    public void onItemChanged(FriendItem item) {
+
+    }
+
+    @Override
+    public void onItemDeleted(FriendItem item) {
+
+    }
+
+    public interface NewPlaylistDialogListener {
+        void onPlaylistItemCreated(PlaylistItem newItem);
+        void onItemChanged(final PlaylistItem item);
+    }
 
 
     @Override
@@ -53,7 +98,20 @@ public class PlaylistCreationFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         FragmentManager manager = getActivity().getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
+        sharedPreferences = getContext().getSharedPreferences("SPOTIFY",0);
 
+        database = Room.databaseBuilder(
+                getActivity().getApplicationContext(),
+                FriendListDatabase.class,
+                "friend-list"
+        ).build();
+
+        editor = getContext().getSharedPreferences("SPOTIFY", 0).edit();
+        adapter = new FriendListRecyclerViewAdapter(this);
+        loadItemsInBackground();
+        listener = (NewPlaylistDialogListener) getActivity();
+
+        text = view.findViewById(R.id.editTextPlaylistName);
         includeGroup = view.findViewById(R.id.radioGroup);
         groupFamily = view.findViewById(R.id.radio_family);
         groupFriends = view.findViewById(R.id.radio_friends);
@@ -91,9 +149,135 @@ public class PlaylistCreationFragment extends Fragment {
 
         createList.setOnClickListener(view1 -> {
 
+            editor.putString("playlistname", text.getText().toString());
+            editor.apply();
+            PlaylistService create = new PlaylistService(getActivity().getApplicationContext());
+            create.addSongToLibrary(null);
+           // create.postNewComment(getActivity().getApplicationContext());
+            getPlaylist();
             transaction.replace(R.id.fragment_playlist_creation, new PlaylistViewFragment());
             transaction.commit();
+
         });
+
+
+
+    }
+
+    private void loadItemsInBackground() {
+        new AsyncTask<Void, Void, List<FriendItem>>() {
+
+            @Override
+            protected List<FriendItem> doInBackground(Void... voids) {
+                return database.friendItemDao().getAll();
+            }
+
+            @Override
+            protected void onPostExecute(List<FriendItem> friendItems) {
+                adapter.update(friendItems);
+            }
+        }.execute();
+    }
+    void getPlaylist(){
+        ArrayList<String> ids = new ArrayList<>();
+        if (intersectAll.isChecked()) {
+            if (groupFamily.isChecked()) {
+                ids = adapter.getIdsFam();
+            }
+            if (groupFriends.isChecked()) {
+                ids = adapter.getIdsFrand();
+            }
+            if (groupSelect.isChecked()) {
+                ids = adapter.getIds();
+
+            }
+        }else if (intersectCustom.isChecked()){
+            if (groupFamily.isChecked()) {
+                ids = adapter.getIdsFam(intersectPickerNumber);
+            }
+            if (groupFriends.isChecked()) {
+                ids = adapter.getIdsFrand(intersectPickerNumber);
+            }
+            if (groupSelect.isChecked()) {
+                ids = adapter.getIds(intersectPickerNumber);
+
+            }
+
+
+        }
+        k=0;
+        size = ids.size();
+        for (String s:ids
+             ) {
+            SongService songService = new SongService(getActivity().getApplicationContext(),s);
+            songService.getRecentlyPlayedTracks(new VolleyCallBack() {
+                @Override
+                public void onSuccess() {
+                    rp=songService.getSongs();
+
+
+
+                    updateSong(s);
+                    if (k==size-1){
+                        enterDatabase();
+                    }
+                    k++;
+                }
+            });
+
+            }
+
+                //  in.initRecyclerView();
+
+
+
+
+    }
+
+    private void enterDatabase() {
+
+        Song temp;
+        for (int i =0 ;i<playlist.size()-2;i++){
+            for (int j = i+1;j<playlist.size()-1;j++){
+                if (playlist.get(i).getPop()<playlist.get(j).getPop()){
+                    temp = playlist.get(i);
+                    playlist.set(i,playlist.get(j));
+                    playlist.set(j,temp);
+                }
+            }
+        }
+        for (Song entry:playlist
+        ) {
+
+            PlaylistItem p= new PlaylistItem();
+            p.trackID = entry.getUri();
+            p.trackname = entry.getName();
+            p.artistName = Integer.toString(entry.getPop());
+            listener.onPlaylistItemCreated(p);
+        }
+
+    }
+
+    void updateSong(String ss){
+
+        for (Song s:rp )
+        {
+            int i=0;
+            while (i<playlist.size() && !s.getId().equals(playlist.get(i).getId()))
+            {
+
+                i++;
+
+            }
+            if (i<playlist.size()){
+                playlist.get(i).setPop();
+            }else{
+                playlist.add(s);
+            }
+
+        }
+
+
 
 
     }

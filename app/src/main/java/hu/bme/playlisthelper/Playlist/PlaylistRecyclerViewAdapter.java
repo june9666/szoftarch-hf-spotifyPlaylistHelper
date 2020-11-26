@@ -25,6 +25,7 @@ public class PlaylistRecyclerViewAdapter extends RecyclerView.Adapter<PlaylistRe
     public PlaylistRecyclerViewAdapter(PlaylistItemClickListener listener) {
         this.listener = listener;
         items = new ArrayList<>();
+
     }
 
     public interface PlaylistItemClickListener{
@@ -69,6 +70,8 @@ public class PlaylistRecyclerViewAdapter extends RecyclerView.Adapter<PlaylistRe
     }
 
 
+    public List<PlaylistItem> getallsong()
+    {return items;}
     class PlaylistItemViewHolder extends RecyclerView.ViewHolder {
 
 

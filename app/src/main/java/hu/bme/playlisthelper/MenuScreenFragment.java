@@ -1,6 +1,7 @@
 package hu.bme.playlisthelper;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,11 +10,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.room.Room;
+
 import hu.bme.playlisthelper.FriendList.FriendListActivity;
 import hu.bme.playlisthelper.Playlist.PlaylistActivity;
+import hu.bme.playlisthelper.Playlist.PlaylistDatabase;
 
 public class MenuScreenFragment extends Fragment {
-
+    public PlaylistDatabase database;
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -26,12 +30,21 @@ public class MenuScreenFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+        database = Room.databaseBuilder(
+                getActivity().getApplicationContext(),
+                PlaylistDatabase.class,
+                "play-list"
+        ).build();
+
         view.findViewById(R.id.button_create_new_playlist).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myIntent = new Intent(getActivity(), PlaylistActivity.class);
 
+                clear();
+                Intent myIntent = new Intent(getActivity(), PlaylistActivity.class);
                 getActivity().startActivity(myIntent);
+
             }
         });
 
@@ -54,5 +67,21 @@ public class MenuScreenFragment extends Fragment {
                         .navigate(R.id.action_SecondFragment_to_FirstFragment);
             }
         });
+    }
+
+    public void clear() {
+        new AsyncTask<Void, Void, Boolean>() {
+
+            @Override
+            protected Boolean doInBackground(Void... voids) {
+                database.playlistItemDao().nukeTable();
+                return true;
+            }
+            @Override
+            protected void onPostExecute(Boolean result){
+
+            }
+
+        }.execute();
     }
 }

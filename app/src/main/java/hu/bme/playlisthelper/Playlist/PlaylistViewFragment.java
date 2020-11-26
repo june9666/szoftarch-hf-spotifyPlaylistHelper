@@ -19,7 +19,9 @@ import hu.bme.playlisthelper.R;
 /**
  * A fragment representing a list of Items.
  */
-public class PlaylistViewFragment extends Fragment  {
+
+//TODO Kell ez?
+public class PlaylistViewFragment extends Fragment   {
     private RecyclerView recyclerView;
     public PlaylistRecyclerViewAdapter adapter;
 
@@ -34,31 +36,7 @@ public class PlaylistViewFragment extends Fragment  {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initRecyclerView();
-    }
-    private void initRecyclerView() {
-        recyclerView = getView().findViewById(R.id.PlaylistRecyclerView);
-        adapter = new PlaylistRecyclerViewAdapter((PlaylistRecyclerViewAdapter.PlaylistItemClickListener) getActivity());
-        loadItemsInBackground();
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
-                DividerItemDecoration.VERTICAL));
-    }
-    private void loadItemsInBackground() {
-        new AsyncTask<Void, Void, List<PlaylistItem>>() {
-
-            @Override
-            protected List<PlaylistItem> doInBackground(Void... voids) {
-                PlaylistActivity activity = (PlaylistActivity) getActivity();
-                return activity.database.playlistItemDao().getAll();
-            }
-
-            @Override
-            protected void onPostExecute(List<PlaylistItem> playlistItems) {
-                adapter.update(playlistItems);
-            }
-        }.execute();
+   ;
     }
 
 

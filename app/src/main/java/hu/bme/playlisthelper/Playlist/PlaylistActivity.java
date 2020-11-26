@@ -1,5 +1,6 @@
 package hu.bme.playlisthelper.Playlist;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,14 +19,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
-import hu.bme.playlisthelper.R;
 
-public class PlaylistActivity extends AppCompatActivity implements PlaylistRecyclerViewAdapter.PlaylistItemClickListener {
+import java.util.List;
+
+import hu.bme.playlisthelper.FriendList.FriendItem;
+import hu.bme.playlisthelper.FriendList.FriendListRecyclerViewAdapter;
+import hu.bme.playlisthelper.R;
+import hu.bme.playlisthelper.api.Connectors.SongService;
+
+public class PlaylistActivity extends AppCompatActivity implements PlaylistCreationFragment.NewPlaylistDialogListener,PlaylistRecyclerViewAdapter.PlaylistItemClickListener {
 
     public PlaylistRecyclerViewAdapter adapter;
-
+    private RecyclerView recyclerView;
     public PlaylistDatabase database;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +50,37 @@ public class PlaylistActivity extends AppCompatActivity implements PlaylistRecyc
                 "play-list"
         ).build();
 
+        adapter = new PlaylistRecyclerViewAdapter(this);
+        sharedPreferences = getSharedPreferences("SPOTIFY",0);
 
 
+    }
+
+
+
+    public void initRecyclerView() {
+        recyclerView = findViewById(R.id.PlaylistRecyclerView);
+        adapter = new PlaylistRecyclerViewAdapter(this) ;
+        loadItemsInBackground();
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this,
+                DividerItemDecoration.VERTICAL));
+    }
+    private void loadItemsInBackground() {
+        new AsyncTask<Void, Void, List<PlaylistItem>>() {
+
+            @Override
+            protected List<PlaylistItem> doInBackground(Void... voids) {
+
+                return database.playlistItemDao().getAll();
+            }
+
+            @Override
+            protected void onPostExecute(List<PlaylistItem> playlistItems) {
+                adapter.update(playlistItems);
+            }
+        }.execute();
     }
 
     @Override
@@ -57,7 +97,11 @@ public class PlaylistActivity extends AppCompatActivity implements PlaylistRecyc
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
+
+        //TODO ennek kéne új gomb valami értelmes helyen, ezeket a függvényeket hívd meg, lehetőleg ebben az activityben
         if (id == R.id.action_settings) {
+            SongService create = new SongService(getApplicationContext(),sharedPreferences.getString("playlistid",""));
+            create.addSongToLibrary(adapter.getallsong());
             return true;
         }
 
@@ -116,7 +160,7 @@ public class PlaylistActivity extends AppCompatActivity implements PlaylistRecyc
     }
 
 
-
+    @Override
     public void onPlaylistItemCreated(PlaylistItem newItem) {
         new AsyncTask<Void, Void, PlaylistItem>() {
 
@@ -129,7 +173,11 @@ public class PlaylistActivity extends AppCompatActivity implements PlaylistRecyc
 
             @Override
             protected void onPostExecute(PlaylistItem playlistItem) {
-                adapter.addItem(playlistItem);
+                if (playlistItem != null){
+                    adapter.addItem(playlistItem);
+                }
+                initRecyclerView();
+
 
             }
         }.execute();

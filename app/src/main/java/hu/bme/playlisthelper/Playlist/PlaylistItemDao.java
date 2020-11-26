@@ -23,4 +23,7 @@ public interface PlaylistItemDao {
     @Delete
     void deleteItem(PlaylistItem playlistItem);
 
+    @Query("DELETE FROM PlaylistItem")
+    public void nukeTable();
+
 }

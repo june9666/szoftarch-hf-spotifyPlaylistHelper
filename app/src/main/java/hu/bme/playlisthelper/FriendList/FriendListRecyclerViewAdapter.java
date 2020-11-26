@@ -63,6 +63,90 @@ public class FriendListRecyclerViewAdapter extends RecyclerView.Adapter<FriendLi
         holder.item = item;
     }
 
+    public ArrayList<String> getIds(){
+        ArrayList<String> temp = new ArrayList<>();
+        for (FriendItem i: items
+             ) {
+            if (i.isDefault)
+            {
+                temp.add(i.username);
+            }
+
+        }
+
+        return temp;
+    }
+    public ArrayList<String> getIds(int max){
+        int m = 1;
+        ArrayList<String> temp = new ArrayList<>();
+        for (FriendItem i: items
+        ) {
+            if (i.isDefault)
+            {
+                if (m<=max){
+                    temp.add(i.username);
+                    m++;
+                }
+            }
+
+        }
+
+        return temp;
+    }
+    public ArrayList<String> getIdsFam(){
+        ArrayList<String> temp = new ArrayList<>();
+        for (FriendItem i: items
+        ) {
+            if (i.category == FriendItem.Category.FAMILY) {
+                temp.add(i.username);
+            }
+        }
+
+        return temp;
+    }
+    public ArrayList<String> getIdsFam(int max){
+        int m = 1;
+        ArrayList<String> temp = new ArrayList<>();
+        for (FriendItem i: items
+        ) {
+            if (i.category == FriendItem.Category.FAMILY) {
+                if (m<=max){
+                    temp.add(i.username);
+                    m++;
+                }
+            }
+        }
+
+        return temp;
+    }
+    public ArrayList<String> getIdsFrand(){
+        ArrayList<String> temp = new ArrayList<>();
+        for (FriendItem i: items
+        ) {
+            if (i.category == FriendItem.Category.FRIEND) {
+                temp.add(i.username);
+            }
+        }
+
+        return temp;
+    }
+    public ArrayList<String> getIdsFrand(int max){
+        int m = 1;
+        ArrayList<String> temp = new ArrayList<>();
+        for (FriendItem i: items
+        ) {
+            if (i.category == FriendItem.Category.FRIEND) {
+                if (m<=max){
+                    temp.add(i.username);
+                    m++;
+                }
+
+            }
+        }
+
+        return temp;
+    }
+
     public void addItem(FriendItem item) {
 
         Log.d("Friend", "Adapter addItem called with" + item.name + item.toString());
