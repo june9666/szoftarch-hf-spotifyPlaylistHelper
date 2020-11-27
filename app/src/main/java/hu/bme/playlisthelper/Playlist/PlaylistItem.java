@@ -12,6 +12,9 @@ public class PlaylistItem {
     @PrimaryKey(autoGenerate = true)
     public Long id;
 
+    @ColumnInfo(name = "matches")
+    public int matches;
+
     @ColumnInfo(name = "trackid")
     public String trackID;
 

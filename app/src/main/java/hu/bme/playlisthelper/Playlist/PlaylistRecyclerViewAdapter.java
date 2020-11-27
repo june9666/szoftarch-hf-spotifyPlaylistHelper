@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +39,8 @@ public class PlaylistRecyclerViewAdapter extends RecyclerView.Adapter<PlaylistRe
     @NonNull
     @Override
     public PlaylistItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+
         View itemView = LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.item_playlist, parent, false);
@@ -45,6 +50,8 @@ public class PlaylistRecyclerViewAdapter extends RecyclerView.Adapter<PlaylistRe
 
     @Override
     public void onBindViewHolder(@NonNull PlaylistItemViewHolder holder, int position) {
+
+
         PlaylistItem item = items.get(position);
         holder.trackName.setText(item.artistName);
         holder.artistName.setText(item.trackname);
@@ -74,7 +81,7 @@ public class PlaylistRecyclerViewAdapter extends RecyclerView.Adapter<PlaylistRe
     {return items;}
     class PlaylistItemViewHolder extends RecyclerView.ViewHolder {
 
-
+        TextView matchesNumber;
         TextView trackName;
         TextView artistName;
 
@@ -84,7 +91,7 @@ public class PlaylistRecyclerViewAdapter extends RecyclerView.Adapter<PlaylistRe
         @SuppressLint("ClickableViewAccessibility")
         PlaylistItemViewHolder(View itemView) {
             super(itemView);
-
+            matchesNumber =itemView.findViewById(R.id.PlaylistItemMatches);
             trackName = itemView.findViewById(R.id.PlaylistItemTrackNameTextView);
             artistName = itemView.findViewById(R.id.PlaylistItemArtistTextView);
             removeButton = itemView.findViewById(R.id.PlaylistItemRemoveButton);

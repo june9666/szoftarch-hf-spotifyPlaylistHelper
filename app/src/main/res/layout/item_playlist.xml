@@ -10,10 +10,8 @@
     android:paddingTop="8dp">
 
 
-
-
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="14dp"
@@ -21,16 +19,36 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/PlaylistItemTrackNameTextView"
-            android:layout_width="wrap_content"
+            android:id="@+id/PlaylistItemMatches"
+            android:layout_width="25dp"
             android:layout_height="wrap_content"
-            tools:text="Trackname" />
+
+            android:text="11" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="14dp"
+        android:layout_weight="25"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/PlaylistItemArtistTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
             tools:text="Artist" />
+
+        <TextView
+            android:id="@+id/PlaylistItemTrackNameTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Trackname"
+            android:maxLines="2"
+            android:ellipsize="end"/>
 
     </LinearLayout>
 

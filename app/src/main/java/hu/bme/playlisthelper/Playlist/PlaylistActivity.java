@@ -7,12 +7,15 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,7 +31,9 @@ import java.util.List;
 
 import hu.bme.playlisthelper.FriendList.FriendItem;
 import hu.bme.playlisthelper.FriendList.FriendListRecyclerViewAdapter;
+import hu.bme.playlisthelper.FriendList.NewFriendDialogFragment;
 import hu.bme.playlisthelper.R;
+import hu.bme.playlisthelper.SplashActivity;
 import hu.bme.playlisthelper.api.Connectors.SongService;
 
 public class PlaylistActivity extends AppCompatActivity implements PlaylistCreationFragment.NewPlaylistDialogListener,PlaylistRecyclerViewAdapter.PlaylistItemClickListener {
@@ -52,8 +57,6 @@ public class PlaylistActivity extends AppCompatActivity implements PlaylistCreat
 
         adapter = new PlaylistRecyclerViewAdapter(this);
         sharedPreferences = getSharedPreferences("SPOTIFY",0);
-
-
     }
 
 

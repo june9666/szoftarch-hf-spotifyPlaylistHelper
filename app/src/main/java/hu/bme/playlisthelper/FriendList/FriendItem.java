@@ -7,6 +7,7 @@ import androidx.room.TypeConverter;
 
 @Entity(tableName = "frienditem")
 public class FriendItem {
+
     public enum Category {
         FAMILY, FRIEND;
 

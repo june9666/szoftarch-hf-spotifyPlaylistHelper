@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
@@ -20,7 +23,7 @@ import hu.bme.playlisthelper.R;
  * A fragment representing a list of Items.
  */
 
-//TODO Kell ez?
+
 public class PlaylistViewFragment extends Fragment   {
     private RecyclerView recyclerView;
     public PlaylistRecyclerViewAdapter adapter;
@@ -36,8 +39,14 @@ public class PlaylistViewFragment extends Fragment   {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-   ;
+        FloatingActionButton fab = getActivity().findViewById(R.id.fabSave);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getActivity(), "Playlist saved!",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
-
-
 }
