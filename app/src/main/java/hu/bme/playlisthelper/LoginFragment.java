@@ -1,7 +1,10 @@
 package hu.bme.playlisthelper;
 
+import android.app.Activity;
+import android.bluetooth.le.ScanSettings;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +22,7 @@ import hu.bme.playlisthelper.api.Connectors.SongService;
 import hu.bme.playlisthelper.api.Song;
 
 
-//TODO kibaszni minden gombot a login-en kívül és a SplashActivity tovább menjen ne vissza
+
 public class LoginFragment extends Fragment {
 
     @Override
@@ -34,28 +37,28 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        EditText username = view.findViewById(R.id.editTextUsername);
-        EditText password = view.findViewById(R.id.editTextTextPassword);
 
         view.findViewById(R.id.button_login).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent asd = new Intent(getActivity(), SplashActivity.class);
-                startActivity(asd);
-                NavHostFragment.findNavController(LoginFragment.this)
-                        .navigate(R.id.action_Login_to_MenuScreen);
+                Intent loginIntent = new Intent(getActivity(), SplashActivity.class);
+                loginIntent.putExtra("activityFinished",0);
+                startActivityForResult(loginIntent,1);
             }
         });
+    }
 
-        view.findViewById(R.id.button_login2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-
+        switch (resultCode){
+            case Activity.RESULT_OK: //login successful
                 NavHostFragment.findNavController(LoginFragment.this)
                         .navigate(R.id.action_Login_to_MenuScreen);
-            }
-        });
+                break;
+            default: break;
+        }
+
     }
 
     @Override

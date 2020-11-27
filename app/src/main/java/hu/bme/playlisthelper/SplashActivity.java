@@ -2,11 +2,13 @@ package hu.bme.playlisthelper;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -17,24 +19,18 @@ import com.spotify.sdk.android.auth.AuthorizationResponse;
 import hu.bme.playlisthelper.api.Connectors.UserService;
 import hu.bme.playlisthelper.api.User;
 
-import static com.spotify.sdk.android.auth.AccountsQueryParameters.CLIENT_ID;
-import static com.spotify.sdk.android.auth.AccountsQueryParameters.REDIRECT_URI;
 import static com.spotify.sdk.android.auth.AuthorizationResponse.Type.TOKEN;
-import static com.spotify.sdk.android.auth.LoginActivity.REQUEST_CODE;
 
 public class SplashActivity extends AppCompatActivity {
 
     private SharedPreferences.Editor editor;
     private SharedPreferences msharedPreferences;
-
     private RequestQueue queue;
-
 
     private static final String CLIENT_ID = "3c870d78055e461abda7ec5fe5d3cea6";
     private static final String REDIRECT_URI ="hu.bme.playlisthelper://callback";
     private static final int REQUEST_CODE = 1337;
     private static final String SCOPES = "user-read-recently-played,user-library-modify,playlist-modify-private,user-read-email,user-read-private,playlist-modify-public";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +38,6 @@ public class SplashActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_splash);
-
 
         authenticateSpotify();
 
@@ -77,12 +72,17 @@ public class SplashActivity extends AppCompatActivity {
                     break;
 
                 // Auth flow returned an error
-                case ERROR:
-                    // Handle error response
+                case ERROR: {
+                    Toast.makeText(SplashActivity.this, "Login failed!",
+                            Toast.LENGTH_SHORT).show();
+                    finishThisActivity(Activity.RESULT_CANCELED);
+                }
                     break;
 
                 // Most likely auth flow was cancelled
                 default:
+                    Toast.makeText(SplashActivity.this, "Error during login!",
+                            Toast.LENGTH_SHORT).show();
                     // Handle other cases
             }
         }
@@ -97,14 +97,15 @@ public class SplashActivity extends AppCompatActivity {
             Log.d("STARTING", "GOT USER INFORMATION");
             // We use commit instead of apply because we need the information stored immediately
             editor.commit();
-            startMainActivity();
+            Toast.makeText(SplashActivity.this, "Login successful!",
+                    Toast.LENGTH_SHORT).show();
+            finishThisActivity(Activity.RESULT_OK);
         });
     }
 
-    //TODO itt kéne átnavigálni a választás képernyőre nem vissza loginhez
-    private void startMainActivity() {
-        Intent newintent = new Intent(SplashActivity.this, MainActivity.class);
-        startActivity(newintent);
+    private void finishThisActivity(int resultCode) {
+        Intent resultIntent = new Intent();
+        setResult(resultCode, resultIntent);
+        finish();
     }
-
 }
