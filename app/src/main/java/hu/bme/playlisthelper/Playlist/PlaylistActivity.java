@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import hu.bme.playlisthelper.FriendList.FriendItem;
@@ -37,6 +38,7 @@ import hu.bme.playlisthelper.SplashActivity;
 import hu.bme.playlisthelper.api.Connectors.PlaylistService;
 import hu.bme.playlisthelper.api.Connectors.SongService;
 import hu.bme.playlisthelper.api.Connectors.VolleyCallBack;
+import hu.bme.playlisthelper.api.Song;
 
 public class PlaylistActivity extends AppCompatActivity implements PlaylistCreationFragment.NewPlaylistDialogListener,PlaylistRecyclerViewAdapter.PlaylistItemClickListener {
 
@@ -89,8 +91,22 @@ public class PlaylistActivity extends AppCompatActivity implements PlaylistCreat
                 create.addSongToLibrary(null, new VolleyCallBack() {
                     @Override
                     public void onSuccess() {
+                        List<PlaylistItem> temp = adapter.getallsong();
+                        List<PlaylistItem> send = new ArrayList<>();
+                        int k=0;
+                        for (PlaylistItem p:temp
+                             ) {
+                            send.add(p);
+                            k++;
+                            if (k%90==0){
+                                SongService addSongs = new SongService(getApplicationContext(),sharedPreferences.getString("playlistid",""));
+                                addSongs.addSongToLibrary(send);
+                                send.clear();
+                            }
+
+                        }
                         SongService addSongs = new SongService(getApplicationContext(),sharedPreferences.getString("playlistid",""));
-                        addSongs.addSongToLibrary(adapter.getallsong());
+                        addSongs.addSongToLibrary(send);
                         Toast.makeText(getApplicationContext(), "Playlist saved!",
                                 Toast.LENGTH_SHORT).show();
 
