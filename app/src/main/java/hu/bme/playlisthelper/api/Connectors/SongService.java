@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import hu.bme.playlisthelper.Playlist.PlaylistItem;
+import hu.bme.playlisthelper.api.Artist;
 import hu.bme.playlisthelper.api.Song;
 
 public class SongService {
@@ -47,17 +48,45 @@ public class SongService {
                     public void onResponse(JSONObject response) {Gson gson = new Gson();
                         JSONArray jsonArray = response.optJSONArray("items");
                         for (int n = 0; n < jsonArray.length(); n++) {
+
+                            Artist artist=new Artist();
+                            try {
+                                JSONObject objecta = jsonArray.getJSONObject(n);
+                                objecta = objecta.optJSONObject("track");
+                                JSONArray obja = objecta.optJSONArray("artists");
+                                for (int i = 0; i < obja.length(); i++) {
+                                    JSONObject object = obja.getJSONObject(i);
+                                    artist = gson.fromJson(object.toString(), Artist.class);
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
                             try {
                                 JSONObject object = jsonArray.getJSONObject(n);
                                 object = object.optJSONObject("track");
                                 Song song = gson.fromJson(object.toString(), Song.class);
                                 song.setPop();
+                                song.setArtist(artist.getName());
                                 songs.add(song);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
-                        callBack.onSuccess();
+
+                        try {
+                            if (!response.getString("next").equals("null")){
+                                getNext(response.getString("next"),callBack);
+                            }else
+                            {
+                                callBack.onSuccess();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
                     }
 
 
@@ -78,6 +107,69 @@ public class SongService {
         return songs;
     }
 
+    public void getNext(String Endpoint,final VolleyCallBack callBack) {
+        String endpoint = Endpoint;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, endpoint, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {Gson gson = new Gson();
+                        JSONArray jsonArray = response.optJSONArray("items");
+                        for (int n = 0; n < jsonArray.length(); n++) {
+
+                            Artist artist=new Artist();
+                            try {
+                                JSONObject objecta = jsonArray.getJSONObject(n);
+                                objecta = objecta.optJSONObject("track");
+                                JSONArray obja = objecta.optJSONArray("artists");
+                                for (int i = 0; i < obja.length(); i++) {
+                                    JSONObject object = obja.getJSONObject(i);
+                                    artist = gson.fromJson(object.toString(), Artist.class);
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            try {
+                                JSONObject object = jsonArray.getJSONObject(n);
+                                object = object.optJSONObject("track");
+                                Song song = gson.fromJson(object.toString(), Song.class);
+                                song.setPop();
+                                song.setArtist(artist.getName());
+                                songs.add(song);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+
+                        }
+                        try {
+                            if (!response.getString("next").equals("null")) {
+                                getNext(response.getString("next"), callBack);
+                            }else {
+                                callBack.onSuccess();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+
+                }, error -> {
+                    // TODO: Handle error
+
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                String token = sharedPreferences.getString("token", "");
+                String auth = "Bearer " + token;
+                headers.put("Authorization: ", auth);
+                return headers;
+            }
+        };
+        queue.add(jsonObjectRequest);
+    }
 
 
 

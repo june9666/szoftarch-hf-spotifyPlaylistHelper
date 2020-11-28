@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.room.Room;
 
+import com.spotify.sdk.android.auth.AuthorizationClient;
+
 import hu.bme.playlisthelper.FriendList.FriendListActivity;
 import hu.bme.playlisthelper.Playlist.PlaylistActivity;
 import hu.bme.playlisthelper.Playlist.PlaylistDatabase;
@@ -63,6 +65,7 @@ public class MenuScreenFragment extends Fragment {
         view.findViewById(R.id.button_second).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                AuthorizationClient.clearCookies(getActivity().getApplicationContext());
                 NavHostFragment.findNavController(MenuScreenFragment.this)
                         .navigate(R.id.action_SecondFragment_to_FirstFragment);
             }

@@ -6,6 +6,7 @@ public class Song {
     private String name;
     private int popular =1;
     private String uri;
+    private String artist;
 
     public Song(String id, String name) {
         this.name = name;
@@ -35,4 +36,11 @@ public class Song {
         this.name = name;
     }
 
+    public String getArtist() {
+        return artist;
+    }
+
+    public void setArtist(String artist) {
+        this.artist = artist;
+    }
 }

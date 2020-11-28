@@ -55,6 +55,7 @@ public class PlaylistRecyclerViewAdapter extends RecyclerView.Adapter<PlaylistRe
         PlaylistItem item = items.get(position);
         holder.trackName.setText(item.artistName);
         holder.artistName.setText(item.trackname);
+        holder.matchesNumber.setText(Integer.toString(item.matches));
 
         holder.item = item;
     }

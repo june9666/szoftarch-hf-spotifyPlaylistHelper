@@ -34,7 +34,9 @@ import hu.bme.playlisthelper.FriendList.FriendListRecyclerViewAdapter;
 import hu.bme.playlisthelper.FriendList.NewFriendDialogFragment;
 import hu.bme.playlisthelper.R;
 import hu.bme.playlisthelper.SplashActivity;
+import hu.bme.playlisthelper.api.Connectors.PlaylistService;
 import hu.bme.playlisthelper.api.Connectors.SongService;
+import hu.bme.playlisthelper.api.Connectors.VolleyCallBack;
 
 public class PlaylistActivity extends AppCompatActivity implements PlaylistCreationFragment.NewPlaylistDialogListener,PlaylistRecyclerViewAdapter.PlaylistItemClickListener {
 
@@ -57,6 +59,7 @@ public class PlaylistActivity extends AppCompatActivity implements PlaylistCreat
 
         adapter = new PlaylistRecyclerViewAdapter(this);
         sharedPreferences = getSharedPreferences("SPOTIFY",0);
+
     }
 
 
@@ -69,6 +72,26 @@ public class PlaylistActivity extends AppCompatActivity implements PlaylistCreat
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(this,
                 DividerItemDecoration.VERTICAL));
+
+        FloatingActionButton fab = findViewById(R.id.fabSave);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PlaylistService create = new PlaylistService(getApplicationContext(),null);
+                create.addSongToLibrary(null, new VolleyCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        SongService addSongs = new SongService(getApplicationContext(),sharedPreferences.getString("playlistid",""));
+                        addSongs.addSongToLibrary(adapter.getallsong());
+                        Toast.makeText(getApplicationContext(), "Playlist saved!",
+                                Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+            }
+        });
     }
     private void loadItemsInBackground() {
         new AsyncTask<Void, Void, List<PlaylistItem>>() {
@@ -103,8 +126,7 @@ public class PlaylistActivity extends AppCompatActivity implements PlaylistCreat
 
         //TODO ennek kéne új gomb valami értelmes helyen, ezeket a függvényeket hívd meg, lehetőleg ebben az activityben
         if (id == R.id.action_settings) {
-            SongService create = new SongService(getApplicationContext(),sharedPreferences.getString("playlistid",""));
-            create.addSongToLibrary(adapter.getallsong());
+
             return true;
         }
 

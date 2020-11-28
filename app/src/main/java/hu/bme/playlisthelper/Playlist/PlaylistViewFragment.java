@@ -1,5 +1,6 @@
 package hu.bme.playlisthelper.Playlist;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,6 +18,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import hu.bme.playlisthelper.R;
+import hu.bme.playlisthelper.api.Connectors.PlaylistService;
+import hu.bme.playlisthelper.api.Connectors.SongService;
 
 
 /**
@@ -26,12 +29,15 @@ import hu.bme.playlisthelper.R;
 
 public class PlaylistViewFragment extends Fragment   {
     private RecyclerView recyclerView;
-    public PlaylistRecyclerViewAdapter adapter;
+    public List<PlaylistItem> adapter;
+    private SharedPreferences sharedPreferences;
 
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
+
+
     ) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_playlist_view, container, false);
@@ -39,14 +45,6 @@ public class PlaylistViewFragment extends Fragment   {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        FloatingActionButton fab = getActivity().findViewById(R.id.fabSave);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getActivity(), "Playlist saved!",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 }

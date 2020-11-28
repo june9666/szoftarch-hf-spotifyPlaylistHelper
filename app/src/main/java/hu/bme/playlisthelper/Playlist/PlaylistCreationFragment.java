@@ -65,6 +65,10 @@ public class PlaylistCreationFragment extends Fragment implements FriendListRecy
     int size=0;
     ArrayList<Song> rp;
     ArrayList<Song> playlist = new ArrayList<>();
+
+    String lastMen;
+
+    ArrayList<String> playlistIds;
     SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
@@ -151,8 +155,8 @@ public class PlaylistCreationFragment extends Fragment implements FriendListRecy
 
             editor.putString("playlistname", text.getText().toString());
             editor.apply();
-            PlaylistService create = new PlaylistService(getActivity().getApplicationContext());
-            create.addSongToLibrary(null);
+         //   PlaylistService create = new PlaylistService(getActivity().getApplicationContext());
+           // create.addSongToLibrary(null);
            // create.postNewComment(getActivity().getApplicationContext());
             getPlaylist();
             transaction.replace(R.id.fragment_playlist_creation, new PlaylistViewFragment());
@@ -205,25 +209,53 @@ public class PlaylistCreationFragment extends Fragment implements FriendListRecy
 
 
         }
+
+
         k=0;
-        size = ids.size();
+        size = 0;
+        int index = -2;
         for (String s:ids
              ) {
-            SongService songService = new SongService(getActivity().getApplicationContext(),s);
-            songService.getRecentlyPlayedTracks(new VolleyCallBack() {
+            if (index<0){
+                lastMen = ids.get(0);
+                index++;
+            }else{
+                lastMen = ids.get(index);
+                index++;
+            }
+
+
+            PlaylistService play = new PlaylistService(getActivity().getApplicationContext(),s);
+            play.getUserPlaylists( new VolleyCallBack() {
                 @Override
                 public void onSuccess() {
-                    rp=songService.getSongs();
+                    playlistIds=play.getPlaylistIds();
+                    size += playlistIds.size();
+                    for (String id:playlistIds
+                         ) {
+
+                        SongService songService = new SongService(getActivity().getApplicationContext(),id);
+                        songService.getRecentlyPlayedTracks(new VolleyCallBack() {
+                            @Override
+                            public void onSuccess() {
+                                rp=songService.getSongs();
 
 
 
-                    updateSong(s);
-                    if (k==size-1){
-                        enterDatabase();
+                                updateSong(s);
+                                if (k==size-1){
+                                    enterDatabase();
+                                }
+                                k++;
+                            }
+                        });
+
                     }
-                    k++;
                 }
             });
+
+
+
 
             }
 
@@ -252,7 +284,8 @@ public class PlaylistCreationFragment extends Fragment implements FriendListRecy
             PlaylistItem p= new PlaylistItem();
             p.trackID = entry.getUri();
             p.trackname = entry.getName();
-            p.artistName = Integer.toString(entry.getPop());
+            p.artistName = entry.getArtist();
+            p.matches = entry.getPop();
             listener.onPlaylistItemCreated(p);
         }
 
@@ -269,9 +302,10 @@ public class PlaylistCreationFragment extends Fragment implements FriendListRecy
                 i++;
 
             }
-            if (i<playlist.size()){
+            if (i<playlist.size()&& !ss.equals(lastMen)) {
                 playlist.get(i).setPop();
-            }else{
+            }
+            if (i>=playlist.size()){
                 playlist.add(s);
             }
 
