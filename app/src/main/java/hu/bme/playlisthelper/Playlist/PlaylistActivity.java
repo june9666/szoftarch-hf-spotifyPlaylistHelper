@@ -44,6 +44,7 @@ public class PlaylistActivity extends AppCompatActivity implements PlaylistCreat
     private RecyclerView recyclerView;
     public PlaylistDatabase database;
     SharedPreferences sharedPreferences;
+    int ok=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,13 +66,19 @@ public class PlaylistActivity extends AppCompatActivity implements PlaylistCreat
 
 
     public void initRecyclerView() {
-        recyclerView = findViewById(R.id.PlaylistRecyclerView);
-        adapter = new PlaylistRecyclerViewAdapter(this) ;
+        ok++;
+        if (ok<2){
+            recyclerView = findViewById(R.id.PlaylistRecyclerView);
+            adapter = new PlaylistRecyclerViewAdapter(this) ;
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.addItemDecoration(new DividerItemDecoration(this,
+                    DividerItemDecoration.VERTICAL));
+        }
+
         loadItemsInBackground();
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this,
-                DividerItemDecoration.VERTICAL));
+
 
         FloatingActionButton fab = findViewById(R.id.fabSave);
 

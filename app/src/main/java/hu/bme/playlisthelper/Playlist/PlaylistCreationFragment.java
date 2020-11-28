@@ -213,16 +213,9 @@ public class PlaylistCreationFragment extends Fragment implements FriendListRecy
 
         k=0;
         size = 0;
-        int index = -2;
         for (String s:ids
              ) {
-            if (index<0){
-                lastMen = ids.get(0);
-                index++;
-            }else{
-                lastMen = ids.get(index);
-                index++;
-            }
+
 
 
             PlaylistService play = new PlaylistService(getActivity().getApplicationContext(),s);
@@ -257,11 +250,9 @@ public class PlaylistCreationFragment extends Fragment implements FriendListRecy
 
 
 
-            }
+        }
 
                 //  in.initRecyclerView();
-
-
 
 
     }
@@ -302,12 +293,15 @@ public class PlaylistCreationFragment extends Fragment implements FriendListRecy
                 i++;
 
             }
-            if (i<playlist.size()&& !ss.equals(lastMen)) {
+            if (i<playlist.size()&& !ss.equals(playlist.get(i).firstUser)) {
                 playlist.get(i).setPop();
             }
             if (i>=playlist.size()){
+                s.firstUser = ss;
                 playlist.add(s);
             }
+
+
 
         }
 

@@ -7,6 +7,7 @@ public class Song {
     private int popular =1;
     private String uri;
     private String artist;
+    public String firstUser;
 
     public Song(String id, String name) {
         this.name = name;
