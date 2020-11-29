@@ -280,23 +280,23 @@ public class PlaylistCreationFragment extends Fragment implements FriendListRecy
 
     }
 
-    void updateSong(String ss){
+    void updateSong(String id){
 
-        for (Song s:rp )
+        for (Song track:rp )
         {
             int i=0;
-            while (i<playlist.size() && !s.getId().equals(playlist.get(i).getId()))
+            while (i<playlist.size() && !track.getId().equals(playlist.get(i).getId()))
             {
 
                 i++;
 
             }
-            if (i<playlist.size()&& !ss.equals(playlist.get(i).firstUser)) {
+            if (i<playlist.size()&& !id.equals(playlist.get(i).firstUser)) {
                 playlist.get(i).setPop();
             }
             if (i>=playlist.size()){
-                s.firstUser = ss;
-                playlist.add(s);
+                track.firstUser = id;
+                playlist.add(track);
             }
 
 

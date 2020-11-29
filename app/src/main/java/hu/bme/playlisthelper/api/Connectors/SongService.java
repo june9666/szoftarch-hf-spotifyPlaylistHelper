@@ -173,9 +173,6 @@ public class SongService {
 
 
 
-
-
-
     public void addSongToLibrary(List<PlaylistItem> songs) {
         JsonObjectRequest jsonObjectRequest = prepareSongLibraryRequest(songs);
         queue.add(jsonObjectRequest);
@@ -198,7 +195,7 @@ public class SongService {
                 e.printStackTrace();
             }
         }, error -> {
-            int asd = error.networkResponse.statusCode;
+            int err = error.networkResponse.statusCode;
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
