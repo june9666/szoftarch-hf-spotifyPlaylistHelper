@@ -184,7 +184,7 @@ public class PlaylistCreationFragment extends Fragment implements FriendListRecy
     }
     void getPlaylist(){
         ArrayList<String> ids = new ArrayList<>();
-        if (intersectAll.isChecked()) {
+
             if (groupFamily.isChecked()) {
                 ids = adapter.getIdsFam();
             }
@@ -195,20 +195,9 @@ public class PlaylistCreationFragment extends Fragment implements FriendListRecy
                 ids = adapter.getIds();
 
             }
-        }else if (intersectCustom.isChecked()){
-            if (groupFamily.isChecked()) {
-                ids = adapter.getIdsFam(intersectPickerNumber);
-            }
-            if (groupFriends.isChecked()) {
-                ids = adapter.getIdsFrand(intersectPickerNumber);
-            }
-            if (groupSelect.isChecked()) {
-                ids = adapter.getIds(intersectPickerNumber);
-
-            }
 
 
-        }
+
 
 
         k=0;
@@ -271,13 +260,22 @@ public class PlaylistCreationFragment extends Fragment implements FriendListRecy
         }
         for (Song entry:playlist
         ) {
+            if (intersectCustom.isChecked() && entry.getPop()>=intersectPickerNumber){
+                PlaylistItem p= new PlaylistItem();
+                p.trackID = entry.getUri();
+                p.trackname = entry.getName();
+                p.artistName = entry.getArtist();
+                p.matches = entry.getPop();
+                listener.onPlaylistItemCreated(p);
+            }else if (intersectAll.isChecked()){
+                PlaylistItem p= new PlaylistItem();
+                p.trackID = entry.getUri();
+                p.trackname = entry.getName();
+                p.artistName = entry.getArtist();
+                p.matches = entry.getPop();
+                listener.onPlaylistItemCreated(p);
+            }
 
-            PlaylistItem p= new PlaylistItem();
-            p.trackID = entry.getUri();
-            p.trackname = entry.getName();
-            p.artistName = entry.getArtist();
-            p.matches = entry.getPop();
-            listener.onPlaylistItemCreated(p);
         }
 
     }
